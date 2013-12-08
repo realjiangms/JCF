@@ -341,13 +341,9 @@ void CJCFView::OnNew()
 	INT_PTR ret;
 	while((ret = temp.DoModal())!=IDCANCEL)
 	{
-		for (int j=temp.m_lianxu;j>0;j--)
-		{
-			sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%d','%s','%s','%d')",temp.m_mingchen,temp.m_guige,temp.m_xianghao,temp.m_fahao,temp.m_riqi.Format("%Y-%m-%d"),temp.m_yonghu,temp.m_bianhao);
-			temp.m_fahao++;
-			dbase.ExecuteSQL(sql);
-		}
-		heji+=temp.m_lianxu;
+		sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",temp.m_mingchen,temp.m_guige,temp.m_xianghao,temp.m_fahao,temp.m_riqi.Format("%Y-%m-%d"),temp.m_yonghu,temp.m_bianhao);
+		dbase.ExecuteSQL(sql);		
+		heji+=1;
 		temp.m_heji.Format("¹² %d ¸ö",heji);
 		i=1;
 	}
@@ -478,10 +474,10 @@ void CJCFView::On32780()
 	switch(result)
 	{
     case IDOK:
-		m_sql.Format("select * from JCF where Fahao>=%d and Fahao<=%d",search.m_fahao1,search.m_fahao2);
+		m_sql.Format("select * from JCF where Fahao between '%s' and '%s'",search.m_fahao1,search.m_fahao2);
 		break;
 	case IDC_BUTTON1:
-		app.Format("Fahao>=%d and Fahao<=%d",search.m_fahao1,search.m_fahao2);
+		app.Format("Fahao between '%s' and '%s'",search.m_fahao1,search.m_fahao2);
 		AppendSql(&m_sql,app);
 		break;
 	case IDCANCEL:

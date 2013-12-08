@@ -59,7 +59,7 @@ int Output(CListCtrl *p,CWnd *parent)
 	for(row=0;row<totalcount;row++)
 	{
 		sampleArray.RemoveAll();
-		for(j=0;j<count;j++)
+		for(int j=0;j<count;j++)
 		{
 			p->GetItemText(row,j,strarray,sizeof(char[100]));
 			strtemp = (CString)strarray;
@@ -182,8 +182,7 @@ int SqlToList(CListCtrl *inlist,CString sql)
 		inlist->InsertItem(k,jcf.m_Mingchen);
 		inlist->SetItem(k, i++, LVIF_TEXT,jcf.m_Guige, -1, 0, 0, 0);
 		inlist->SetItem(k, i++, LVIF_TEXT,jcf.m_Xianghao, -1, 0, 0, 0);
-		str.Format("%d",jcf.m_Fahao);
-		inlist->SetItem(k, i++, LVIF_TEXT,str, -1, 0, 0, 0);
+		inlist->SetItem(k, i++, LVIF_TEXT,jcf.m_Fahao, -1, 0, 0, 0);
 		inlist->SetItem(k, i++, LVIF_TEXT,jcf.m_Riqi.Format("%Y-%m-%d"), -1, 0, 0, 0);
 		inlist->SetItem(k, i++, LVIF_TEXT,jcf.m_Yonghu, -1, 0, 0, 0);
 		str.Format("%d",jcf.m_Bianhao);

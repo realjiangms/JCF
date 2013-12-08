@@ -25,7 +25,7 @@ public:
 	CStringA	m_Mingchen;
 	CStringA	m_Guige;
 	CStringA	m_Xianghao;
-	long    	m_Fahao;
+	CStringA	m_Fahao;
 	CTime	m_Riqi;
 	CStringA	m_Yonghu;
 	long    	m_Bianhao;

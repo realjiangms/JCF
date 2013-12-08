@@ -22,7 +22,7 @@ CJCFSet::CJCFSet(CDatabase* pdb)
 	m_Mingchen = "";
 	m_Guige = "";
 	m_Xianghao = "";
-	m_Fahao = 0;
+	m_Fahao = "";
 	m_Riqi;
 	m_Yonghu = "";
 	m_Bianhao = 0;
@@ -49,7 +49,7 @@ void CJCFSet::DoFieldExchange(CFieldExchange* pFX)
 	RFX_Text(pFX, _T("[Mingchen]"), m_Mingchen);
 	RFX_Text(pFX, _T("[Guige]"), m_Guige);
 	RFX_Text(pFX, _T("[Xianghao]"), m_Xianghao);
-	RFX_Long(pFX, _T("[Fahao]"), m_Fahao);
+	RFX_Text(pFX, _T("[Fahao]"), m_Fahao);
 	RFX_Date(pFX, _T("[Riqi]"), m_Riqi);
 	RFX_Text(pFX, _T("[Yonghu]"), m_Yonghu);
 	RFX_Long(pFX, _T("[Bianhao]"), m_Bianhao);

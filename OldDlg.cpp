@@ -85,13 +85,16 @@ void COldDlg::OnBnClickedButton1()
 	newd.m_mingchen=jcf.m_Mingchen;
 	newd.m_guige=jcf.m_Guige;
 	newd.m_xianghao=jcf.m_Xianghao;
-	newd.m_fahao=jcf.m_Fahao+1;
+	newd.m_fahao=jcf.m_Fahao;
 	newd.m_yonghu=jcf.m_Yonghu;
+	int heji=this->m_List.GetItemCount();
+	newd.m_heji.Format("共 %d 个",heji);
 	while(newd.DoModal()!=IDCANCEL)
 	{
-		sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%d','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,newd.m_fahao,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
-		newd.m_fahao++;
+		sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,newd.m_fahao,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
 		dbase.ExecuteSQL(sql);
+		heji+=1;
+		newd.m_heji.Format("共 %d 个",heji);
 	}
 	Refresh();
 }
@@ -106,7 +109,7 @@ void COldDlg::OnBnClickedButton2()
 		CString sql="";
 		char temp[100];
 		m_List.GetItemText(i,3,temp,100);		
-		sql.Format("delete from JCF where Bianhao=%d and Fahao='%d'", m_bianhao, StrToInt(temp));
+		sql.Format("delete from JCF where Bianhao=%d and Fahao='%s'", m_bianhao, temp);
 		dbase.ExecuteSQL(sql);
 		Refresh();
 		return;
@@ -126,20 +129,21 @@ void COldDlg::OnLvnKeydownList1(NMHDR *pNMHDR, LRESULT *pResult)
 void COldDlg::OnBnClickedButton3()
 {
 	int i=m_List.GetSelectionMark();
+	CString fahao = "";
 	if (i<0)
 		return;
 	else
 	{
 		char ctemp[100];
 		m_List.GetItemText(i,3,ctemp,100);		
-		i=StrToInt(ctemp);		
+		fahao = ctemp;	
 	}
 	CNewDlg newd;
 	CJCFSet jcf;
 	CString sql("");
 	CString sqlre("");
     CString temp="";
-	temp.Format("Select * from JCF where Fahao=%d",i);
+	temp.Format("Select * from JCF where Fahao='%s'",fahao);
 	jcf.Open((-1),temp);
 	newd.m_bianhao=jcf.m_Bianhao;
 	newd.m_mingchen=jcf.m_Mingchen;
@@ -148,12 +152,12 @@ void COldDlg::OnBnClickedButton3()
 	newd.m_fahao=jcf.m_Fahao;
 	newd.m_yonghu=jcf.m_Yonghu;
 	newd.m_riqi.SetDate(jcf.m_Riqi.GetYear(),jcf.m_Riqi.GetMonth(),jcf.m_Riqi.GetDay());
-    sqlre.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%d','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,newd.m_fahao,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
-	sql.Format("delete from JCF where Fahao=%d",i);
+    sqlre.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,newd.m_fahao,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
+	sql.Format("delete from JCF where Fahao='%s'",fahao);
 	dbase.ExecuteSQL(sql);
 	if(newd.DoModal()!=IDCANCEL)
 	{
-		sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%d','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,newd.m_fahao,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
+		sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,newd.m_fahao,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
 		dbase.ExecuteSQL(sql);
 	}
 	else

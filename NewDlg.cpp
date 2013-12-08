@@ -15,7 +15,7 @@ CNewDlg::CNewDlg(CWnd* pParent /*=NULL*/)
 	, m_mingchen(_T(""))
 	, m_guige(_T(""))
 	, m_xianghao(_T(""))
-	, m_fahao(0)
+	, m_fahao("")
 	, m_riqi(COleDateTime::GetCurrentTime())
 	, m_yonghu(_T(""))
 	, m_bianhao(0)
@@ -35,6 +35,7 @@ void CNewDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT3, m_xianghao);
 	DDV_MaxChars(pDX, m_xianghao, 9);
 	DDX_Text(pDX, IDC_EDIT4, m_fahao);
+	m_fahao = m_fahao.Trim();
 	DDX_Text(pDX, IDC_EDIT5, m_riqi);
 	DDX_Text(pDX, IDC_COMBO3, m_yonghu);
 	DDX_Text(pDX, IDC_EDIT7, m_bianhao);
@@ -59,7 +60,7 @@ void CNewDlg::OnBnClickedOk()
 	UpdateData();
 	if(CheckCurrent())
 		return;
-	m_lianxu=GetLianxu();
+	// m_lianxu=GetLianxu();
 	OnOK();
 }
 
@@ -93,16 +94,7 @@ int CNewDlg::CheckCurrent(void)
 	if (m_xianghao.GetLength()<8||m_xianghao[4]!='-')
 		if(AfxMessageBox("ÏäºÅ¸ñÊ½´íÎó,¼ÌÐø£¿",MB_YESNO)==IDNO)
 			return 1;
-	CJCFSet jcf;
-	CString sql="";
-	sql.Format("select * from JCF where Fahao='%d' and Bianhao='%d'",m_fahao,m_bianhao);
-	jcf.Open((-1),sql);
-	if (!jcf.IsEOF())
-	{
-		AfxMessageBox("·§ºÅ³åÍ»");
-		return 1;
-	}
-	else if (m_fahao==0)
+	if (m_fahao.Trim().IsEmpty())
 	{
 		AfxMessageBox("È±ÉÙ·§ºÅ");
 		return 1;
@@ -112,6 +104,16 @@ int CNewDlg::CheckCurrent(void)
 		AfxMessageBox("È±ÉÙÌá»õµ¥±àºÅ");
 		return 1;
 	}
+
+	CJCFSet jcf;
+	CString sql="";
+	sql.Format("select * from JCF where Fahao='%s' and Bianhao='%d'",m_fahao,m_bianhao);
+	jcf.Open((-1),sql);
+	if (!jcf.IsEOF())
+	{
+		AfxMessageBox("·§ºÅ³åÍ»");
+		return 1;
+	}	
 	if (m_mingchen.IsEmpty())
 	{
 		AfxMessageBox("È±ÉÙ²úÆ·Ãû³Æ");

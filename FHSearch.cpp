@@ -13,8 +13,8 @@ IMPLEMENT_DYNCREATE(CFHSearch, CDHtmlDialog)
 
 CFHSearch::CFHSearch(CWnd* pParent /*=NULL*/)
 	: CDHtmlDialog(CFHSearch::IDD, CFHSearch::IDH, pParent)
-	, m_fahao1(0)
-	, m_fahao2(0)
+	, m_fahao1("")
+	, m_fahao2("")
 {
 }
 
@@ -26,7 +26,9 @@ void CFHSearch::DoDataExchange(CDataExchange* pDX)
 {
 	CDHtmlDialog::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT1, m_fahao1);
+	m_fahao1 = m_fahao1.Trim();
 	DDX_Text(pDX, IDC_EDIT2, m_fahao2);
+	m_fahao2 = m_fahao2.Trim();
 }
 
 BOOL CFHSearch::OnInitDialog()
@@ -64,8 +66,7 @@ HRESULT CFHSearch::OnButtonCancel(IHTMLElement* /*pElement*/)
 void CFHSearch::OnBnClickedOk()
 {
 	UpdateData();
-	// TODO: 在此添加控件通知处理程序代码
-	if (m_fahao1==0&&m_fahao2==0)
+	if (m_fahao1.Trim().IsEmpty() || m_fahao2.Trim().IsEmpty())
 		return;
 	OnOK();
 }
@@ -79,7 +80,7 @@ void CFHSearch::OnBnClickedButton1()
 		return;
 	}
 	
-	if (m_fahao1==0&&m_fahao2==0)
+	if (m_fahao1.Trim().IsEmpty() || m_fahao2.Trim().IsEmpty())
 		return;
 	EndDialog(IDC_BUTTON1);
 }

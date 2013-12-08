@@ -24,8 +24,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 	DECLARE_DHTML_EVENT_MAP()
 public:
-	long m_fahao1;
-	long m_fahao2;
+	CString m_fahao1;
+	CString m_fahao2;
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedButton1();
 };
