@@ -1,6 +1,7 @@
 #pragma once
 #include "atlcomtime.h"
 #include "afxwin.h"
+#include <vector>
 
 
 // CNewDlg ¶Ô»°¿ò
@@ -40,4 +41,6 @@ public:
 	long m_lianxu;
 	int GetLianxu(void);
 	afx_msg void OnBnClickedCancel();
+public:
+	std::vector<CString> m_fahaos;
 };

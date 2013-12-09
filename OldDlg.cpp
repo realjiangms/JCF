@@ -91,9 +91,12 @@ void COldDlg::OnBnClickedButton1()
 	newd.m_heji.Format("共 %d 个",heji);
 	while(newd.DoModal()!=IDCANCEL)
 	{
-		sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,newd.m_fahao,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
-		dbase.ExecuteSQL(sql);
-		heji+=1;
+		for (std::vector<CString>::const_iterator it=newd.m_fahaos.begin();it!=newd.m_fahaos.end();it++)
+		{
+			sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,*it,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
+			dbase.ExecuteSQL(sql);		
+			heji+=1;
+		}
 		newd.m_heji.Format("共 %d 个",heji);
 	}
 	Refresh();
@@ -153,15 +156,16 @@ void COldDlg::OnBnClickedButton3()
 	newd.m_yonghu=jcf.m_Yonghu;
 	newd.m_riqi.SetDate(jcf.m_Riqi.GetYear(),jcf.m_Riqi.GetMonth(),jcf.m_Riqi.GetDay());
     sqlre.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,newd.m_fahao,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
-	sql.Format("delete from JCF where Fahao='%s'",fahao);
-	dbase.ExecuteSQL(sql);
 	if(newd.DoModal()!=IDCANCEL)
 	{
-		sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,newd.m_fahao,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
+		sql.Format("delete from JCF where Fahao='%s'",fahao);
 		dbase.ExecuteSQL(sql);
+		for (std::vector<CString>::const_iterator it=newd.m_fahaos.begin();it!=newd.m_fahaos.end();it++)
+		{
+			sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,*it,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
+			dbase.ExecuteSQL(sql);
+		}
 	}
-	else
-		dbase.ExecuteSQL(sqlre);
 	Refresh();
 	
 }

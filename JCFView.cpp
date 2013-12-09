@@ -341,9 +341,12 @@ void CJCFView::OnNew()
 	INT_PTR ret;
 	while((ret = temp.DoModal())!=IDCANCEL)
 	{
-		sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",temp.m_mingchen,temp.m_guige,temp.m_xianghao,temp.m_fahao,temp.m_riqi.Format("%Y-%m-%d"),temp.m_yonghu,temp.m_bianhao);
-		dbase.ExecuteSQL(sql);		
-		heji+=1;
+		for (std::vector<CString>::const_iterator it=temp.m_fahaos.begin();it!=temp.m_fahaos.end();it++)
+		{
+			sql.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",temp.m_mingchen,temp.m_guige,temp.m_xianghao,*it,temp.m_riqi.Format("%Y-%m-%d"),temp.m_yonghu,temp.m_bianhao);
+			dbase.ExecuteSQL(sql);		
+			heji+=1;
+		}		
 		temp.m_heji.Format("¹² %d ¸ö",heji);
 		i=1;
 	}

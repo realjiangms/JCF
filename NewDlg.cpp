@@ -6,6 +6,7 @@
 #include "NewDlg.h"
 #include ".\newdlg.h"
 #include "LianxuDlg.h"
+#include <map>
 
 // CNewDlg 对话框
 
@@ -35,7 +36,7 @@ void CNewDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT3, m_xianghao);
 	DDV_MaxChars(pDX, m_xianghao, 9);
 	DDX_Text(pDX, IDC_EDIT4, m_fahao);
-	m_fahao = m_fahao.Trim();
+	m_fahao = m_fahao.Trim();	
 	DDX_Text(pDX, IDC_EDIT5, m_riqi);
 	DDX_Text(pDX, IDC_COMBO3, m_yonghu);
 	DDX_Text(pDX, IDC_EDIT7, m_bianhao);
@@ -58,7 +59,7 @@ END_MESSAGE_MAP()
 void CNewDlg::OnBnClickedOk()
 {
 	UpdateData();
-	if(CheckCurrent())
+	if(CheckCurrent()) // Also update m_fahaos
 		return;
 	// m_lianxu=GetLianxu();
 	OnOK();
@@ -103,17 +104,52 @@ int CNewDlg::CheckCurrent(void)
 	{
 		AfxMessageBox("缺少提货单编号");
 		return 1;
+	}	
+	
+	CString oriStr=m_fahao;
+	m_fahaos.clear();
+	std::map<CString, int> checkF;
+	checkF.clear();
+	while (true)
+	{
+		CString n = oriStr.SpanExcluding(",\n\r ").Trim();
+		if (!n.IsEmpty()) 
+		{
+			if (checkF[n])
+			{
+				CString msg;
+				msg.Format("阀号重复: %s", n);
+				AfxMessageBox(msg);
+				return 1;
+			}
+			m_fahaos.push_back(n);
+			checkF[n] = 1;
+		}
+		oriStr = oriStr.Right(oriStr.GetLength()-n.GetLength()-1);
+		if (oriStr.IsEmpty())
+		{
+			break;
+		}
 	}
 
 	CJCFSet jcf;
 	CString sql="";
-	sql.Format("select * from JCF where Fahao='%s' and Bianhao='%d'",m_fahao,m_bianhao);
-	jcf.Open((-1),sql);
-	if (!jcf.IsEOF())
+	
+	for (std::vector<CString>::const_iterator it=m_fahaos.begin();it!=m_fahaos.end();it++)
 	{
-		AfxMessageBox("阀号冲突");
-		return 1;
-	}	
+		sql.Format("select * from JCF where Fahao='%s' and Bianhao='%d'",*it,m_bianhao);
+		jcf.Open((-1),sql);
+		if (!jcf.IsEOF())
+		{
+			CString msg;
+			msg.Format("阀号冲突: %s", *it);
+			AfxMessageBox(msg);
+			jcf.Close();
+			return 1;
+		}
+		jcf.Close();
+	}
+		
 	if (m_mingchen.IsEmpty())
 	{
 		AfxMessageBox("缺少产品名称");
