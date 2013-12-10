@@ -112,7 +112,7 @@ int CNewDlg::CheckCurrent(void)
 	checkF.clear();
 	while (true)
 	{
-		CString n = oriStr.SpanExcluding(",\n\r ").Trim();
+		CString n = oriStr.SpanExcluding(",\n\r\t ").Trim();
 		if (!n.IsEmpty()) 
 		{
 			if (checkF[n])
