@@ -26,6 +26,7 @@ public:
 	CString m_guige;
 	CString m_xianghao;
 	CString m_fahao;
+	CString m_ori_fahao;
 	COleDateTime m_riqi;
 	CString m_yonghu;
 	long m_bianhao;

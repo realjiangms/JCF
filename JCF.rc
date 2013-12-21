@@ -181,7 +181,7 @@ CAPTION "关于 JCF"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
-    LTEXT           "集成阀销售记录 Version 1.3",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "集成阀销售记录 Version 1.3.2",IDC_STATIC,40,10,119,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2004",IDC_STATIC,40,25,119,8
     DEFPUSHBUTTON   "确定",IDOK,178,7,50,16,WS_GROUP
 END
@@ -372,7 +372,7 @@ END
 
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ PRODUCTVERSION 1,3,2,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -394,12 +394,12 @@ BEGIN
             VALUE "LegalCopyright", "TODO: (C) <公司名>。保留所有权利。"
             VALUE "OriginalFilename", "JCF.exe"
             VALUE "ProductName", "TODO: <产品名>"
-            VALUE "ProductVersion", "1.0.0.1"
+            VALUE "ProductVersion", "1.3.2.0"
         END
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "翻译", 0x804, 936
+        VALUE "Translation", 0x804, 936
     END
 END
 

@@ -22,6 +22,7 @@ CNewDlg::CNewDlg(CWnd* pParent /*=NULL*/)
 	, m_bianhao(0)
 	, m_heji(_T(""))
 {
+	m_ori_fahao = m_fahao;
 }
 
 CNewDlg::~CNewDlg()
@@ -106,26 +107,36 @@ int CNewDlg::CheckCurrent(void)
 		return 1;
 	}	
 	
+	// Spliting the fahao(s)
 	CString oriStr=m_fahao;
 	m_fahaos.clear();
 	std::map<CString, int> checkF;
 	checkF.clear();
 	while (true)
 	{
-		CString n = oriStr.SpanExcluding(",\n\r\t ").Trim();
+		CString n = oriStr.SpanExcluding(",\n\r\t; ").Trim();
+		oriStr = oriStr.Right(oriStr.GetLength()-n.GetLength()-1);
 		if (!n.IsEmpty()) 
 		{
-			if (checkF[n])
+			while (!n.IsEmpty())
 			{
-				CString msg;
-				msg.Format("阀号重复: %s", n);
-				AfxMessageBox(msg);
-				return 1;
+				int len = 8;
+	
+				// CString pn = n;
+				CString pn = n.Left(len).Trim();
+				if (checkF[pn])
+				{
+					CString msg;
+					msg.Format("阀号重复: %s", pn);
+					AfxMessageBox(msg);
+					return 1;
+				}
+				m_fahaos.push_back(pn);
+				checkF[pn] = 1;
+				// n = "";
+				n = n.GetLength() > len ? n.Right(n.GetLength()-len) : "";
 			}
-			m_fahaos.push_back(n);
-			checkF[n] = 1;
 		}
-		oriStr = oriStr.Right(oriStr.GetLength()-n.GetLength()-1);
 		if (oriStr.IsEmpty())
 		{
 			break;
@@ -134,20 +145,34 @@ int CNewDlg::CheckCurrent(void)
 
 	CJCFSet jcf;
 	CString sql="";
-	
+	CString msg;
 	for (std::vector<CString>::const_iterator it=m_fahaos.begin();it!=m_fahaos.end();it++)
 	{
-		sql.Format("select * from JCF where Fahao='%s' and Bianhao='%d'",*it,m_bianhao);
+		if (m_ori_fahao == *it)
+			continue; // Skip original
+		// sql.Format("select * from JCF where Fahao='%s' and Bianhao='%d'",*it,m_bianhao);
+		sql.Format("select * from JCF where Fahao='%s'",*it);
 		jcf.Open((-1),sql);
 		if (!jcf.IsEOF())
 		{
-			CString msg;
-			msg.Format("阀号冲突: %s", *it);
-			AfxMessageBox(msg);
-			jcf.Close();
-			return 1;
+			CString curr;
+			if (jcf.m_Bianhao == this->m_bianhao)
+			{				
+				curr.Format("    %s(当前销售单)\n", *it);
+			} 
+			else
+			{				
+				curr.Format("    %s(%d)\n", *it, jcf.m_Bianhao);
+			}
+			msg += curr;
 		}
 		jcf.Close();
+	}
+	if (!msg.IsEmpty())
+	{
+		AfxMessageBox("阀号已经存在, 存在的阀号(销售单号)为\n" + msg);
+		jcf.Close();
+		return 1;
 	}
 		
 	if (m_mingchen.IsEmpty())

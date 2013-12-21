@@ -153,6 +153,7 @@ void COldDlg::OnBnClickedButton3()
 	newd.m_guige=jcf.m_Guige;
 	newd.m_xianghao=jcf.m_Xianghao;
 	newd.m_fahao=jcf.m_Fahao;
+	newd.m_ori_fahao = jcf.m_Fahao;
 	newd.m_yonghu=jcf.m_Yonghu;
 	newd.m_riqi.SetDate(jcf.m_Riqi.GetYear(),jcf.m_Riqi.GetMonth(),jcf.m_Riqi.GetDay());
     sqlre.Format("insert into JCF(Mingchen,Guige,Xianghao,Fahao,Riqi,Yonghu,Bianhao) values ('%s','%s','%s','%s','%s','%s','%d')",newd.m_mingchen,newd.m_guige,newd.m_xianghao,newd.m_fahao,newd.m_riqi.Format("%Y-%m-%d"),newd.m_yonghu,newd.m_bianhao);
